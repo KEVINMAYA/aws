@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <!-- Sweet Alert -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.0.2/dist/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.js"
+        integrity="sha512-nqIFZC8560+CqHgXKez61MI0f9XSTKLkm0zFVm/99Wt0jSTZ7yeeYwbzyl0SGn/s8Mulbdw+ScCG41hmO2+FKw=="
+        crossorigin="anonymous"></script>
+
+    <title>Login</title>
+    <link rel="icon" type="image/png" href="/resources/iconoAsobeecol.png">
+</head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-main class="d-flex align-center">
+                <template>
+                    <v-row style="justify-content: center; margin: 2px;">
+                        <form method="post" action="login" id="frm">
+                            <v-container class="text-center" id="frm-c">
+                                <div class="12" id="contenedor">
+                                    <img src="/resources/iconoAsobeecol.png" id="logo">
+                                    <v-text-field id="user" name="user" outlined prepend-inner-icon="mdi-account"
+                                        color="primary">
+                                    </v-text-field>
+                                    </v-text-field>
+                                    <v-text-field id="password" name="password" type="password" outlined
+                                        :append-icon="show4 ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :type="show4 ? 'text' : 'password'" prepend-inner-icon="mdi-key"
+                                        @click:append="show4 = !show4"></v-text-field>
+                                </div>
+                                <button type="submit" class="boton col-12">Ingresar</button><br><br>
+                                <v-btn @click="recuperarContrasenia=true;">¿Olvidaste Contraseña?</v-btn>
+
+                            </v-container>
+                            <!-- Dialogo para recuperar contraseña-->
+                            <v-dialog v-model="recuperarContrasenia" width="500">
+                                <v-form ref="edit" v-model="valid" lazy-validation>
+                                    <!--Titulo-->
+                                    <v-toolbar color="#c24b4b" fixed dark style="text-align: center;">
+                                        <h3 style="margin-left: 20px;">Recuperar tu cuenta</h3>
+                                        <v-spacer></v-spacer>
+                                        <v-btn class="ma-2" text class="close" icon color="white lighten-2"
+                                            @click="recuperarContrasenia = false;">
+                                            <v-icon>mdi-close-thick</v-icon>
+                                        </v-btn>
+                                    </v-toolbar>
+                                    <!--Contenido para cambiar contraseña-->
+                                    <v-card-text style="background-color: whitesmoke;">
+                                        <br>
+                                        <v-form>
+
+                                            <h4>Ingresa tu número de documento para buscar tu cuenta, ingrese la nueva contraseña que desea asignar y finalmente presiones el botón <b>Buscar</b> para solicitar el
+                                                cambio de contraseña.</h4><br>
+
+                                            <v-text-field label="Número de Documento" type="number"
+                                                v-model="idBrigadistaCambio" style="width: 90%;"></v-text-field>                                                
+
+                                                <v-text-field v-model="nuevaPasswordBrigadistaCambio"  
+                                                label="Nueva Contraseña" style="width: 90%;" type="password" outlined
+                                                :append-icon="show4 ? 'mdi-eye' : 'mdi-eye-off'"
+                                                :type="show4 ? 'text' : 'password'" prepend-inner-icon="mdi-key"
+                                                @click:append="show4 = !show4"></v-text-field>
+
+
+                                            <h5>Una vez realizada la solicitud acercarse con el coordinador para que
+                                                confirme su restauración de contraseña.</h5>
+
+
+                                        </v-form>
+
+
+                                        <v-col class="col-3">
+                                            <v-btn id="btn_ac" @click="recuperarContraseniaBrigadista(); enviarSolicitud();">
+                                                Buscar
+                                            </v-btn>
+                                        </v-col>
+                    </v-row>
+                    </v-col>
+                    </v-card-text>
+                    </v-form>
+                    </v-dialog>
+
+                    </form>
+                    </v-row>
+                </template>
+            </v-main>
+        </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.0.2/dist/sweetalert2.all.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Importación de Vuetify, el cual maneja el material design estilo aplicación android -->
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <script>
+
+        //retorna todos los brigadistas
+        let url0 = 'http://localhost:3000/api/searchbrigadista/';
+        //Cambia el estado de cambio contraseña
+        let url1 = 'http://localhost:3000/api/cambiocontraseniabrigadista/';
+        new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            data() {
+                return {
+                    show4: false,
+                    recuperarContrasenia: false,
+                    usuarioEncontrado: null,
+                    idBrigadistaCambio: null,
+
+                }
+            },
+            methods: {
+                recuperarContraseniaBrigadista() {
+                    let idBrigadista = this.idBrigadistaCambio;
+                    axios.get(url0 + idBrigadista).then(response => {
+                        let datos = response.data;
+                        this.usuarioEncontrado = datos[0].idBrigadista; 
+                        this.enviarSolicitud();                      
+
+                    });
+                    
+
+
+
+
+                },
+                enviarSolicitud() {
+                    
+                    if (this.usuarioEncontrado == this.idBrigadistaCambio) {
+                        let id = this.idBrigadistaCambio;
+                        let nueva = this.nuevaPasswordBrigadistaCambio;
+                        axios.post(url1 +nueva+'/'+id).then(response => {                            
+
+                            this.recuperarContrasenia = false;
+                                this.idBrigadistaCambio = null;
+                                this.usuarioEncontrado =0;
+                                this.nuevaPasswordBrigadistaCambio=null;
+
+                                Swal.fire({
+                                    title: 'Solicitud enviada!',
+                                    icon: 'success',
+                                    timer: 1500,
+                                    showConfirmButton: false,
+
+                                });
+
+                        });                        
+
+                    }
+                    else {
+                        Swal.fire({
+                            title: 'Usuario no encontrado!',
+                            icon: 'info',
+                            timer: 1500,
+                            showConfirmButton: false,
+
+                        });
+                    }
+                }
+
+            }
+        })
+    </script>
+    <!-- En este caso se utiliza una herramienta llamada sweetalert, esta nos permite manejar varias notifiaciones al user -->
+    <% if(typeof alert !="undefined" ){%>
+        <!-- Como se usa un motor de platilla ejs la forma de interactuar con html es por medio de esta estructura <% %>-->
+        <script>
+            Swal.fire({ // estamos haciendo de la estructura de sweet donde declaramos un title, text, icon, button and timer, ahora para mandar informacion a esos campos hacemos uso de la estructura y dentro llamamos a las variables que llegan como paramtro
+                icon: '<%= alertIcon %>',
+                title: '<%= alertTitle %>',
+                text: '<%= text %>',
+                showConfirmButton: false,
+                timer: '<%= timer %>',
+                backdrop: '#606f8c93',
+                width: 400,
+
+            }).then(() => {
+                window.location = '/<%=ruta%>'
+            })
+        </script>
+        <%}%>
+
+            <style>
+                body,
+                #app {
+                    background-color: #ca676783;
+                }
+
+                /* Works on Firefox */
+                *::-webkit-scrollbar {
+                    width: 1px;
+                }
+
+                *::-webkit-scrollbar:hover {
+                    width: 7px;
+                }
+
+                /* Estilos barra (thumb) de scroll */
+                *::-webkit-scrollbar-thumb {
+                    background: #8c6060;
+                    height: 4px;
+                    border-radius: 4px;
+                }
+
+                /* Estilos track de scroll */
+                *::-webkit-scrollbar-track {
+                    border-radius: 4px;
+                    background: #8c6060;
+                }
+
+                *::-webkit-scrollbar-track:hover,
+                *::-webkit-scrollbar-track:active {
+                    background: #9e7272;
+                }
+
+                #logo {
+                    width: 100px;
+                    height: 100px;
+                    margin-bottom: 30px;
+                    margin-top: -8px;
+                }
+
+                .v-text-field {
+                    border-radius: 10px;
+                    width: 280px;
+                    padding: 10px;
+                    height: 70px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+
+                .v-text-field:hover {
+                    box-shadow: 0 0 9px rgba(33, 33, 33, .2);
+                    margin-bottom: 14px;
+                    height: 56px;
+                }
+
+                .boton {
+                    background-color: #9e1f1f;
+                    border-radius: 10px;
+                    padding: 14px;
+                    color: white;
+                    font-weight: 40px;
+                    font-size: 19px;
+                    width: 280px;
+                    margin-top: 17px;
+                }
+
+                div[class*='swal2'] {
+                    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+                    font-weight: bold;
+                }
+
+                #frm {
+                    background-color: #b49393;
+                    border-radius: 12%;
+                    box-shadow: 0 0 9px #9b9595;
+                    padding: 4px;
+                }
+
+                #frm:hover {
+                    box-shadow: 0 0 9px #464141f1;
+                }
+
+                #frm-c {
+                    background-color: white;
+                    border-radius: 9%;
+                    padding: 40px;
+                }
+
+                #btn_ac {
+                    background-color: #c24b4b;
+                    color: white;
+                    padding: 10px;
+                    border-radius: 5px;
+                    height: 50px;
+                    width: max-content;
+                }
+            </style>
+
+
+</body>
+
+</html>

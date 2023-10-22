@@ -1,0 +1,2319 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <link rel="icon" type="image/png" href="/resources/iconoAsobeecol.png">
+    <title>Gestion - Asobeecol</title>
+    <!-- Importación de CDNS -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <!-- Importación de iconos para el material design -->
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <!-- Importación de Vuetify, el cual maneja el material design estilo aplicación android -->
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <!-- Importación del plugin SweetAlert2, el cual nos ayudará con las alertas de la aplicación -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.0.2/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Vue js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+
+    <!-- Chart par Vue -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+
+    <!-- Axios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+
+
+
+    <!--Declaramos un div, este va abarcar todo los componenetes de vuetify, ademas en este se declaro un ID para luego llamarlo en vuetify -->
+    <div id="gestion">
+        <v-app id="inspire" style="background: rgba(169, 69, 69, 0.146);">
+            <div>
+                <!-- Nav -->
+                <v-layout>
+                    <v-app-bar color="white" density="compact">
+                        <template>
+                            <v-app-bar-nav-icon @click="drawer1 = !drawer1"></v-app-bar-nav-icon>
+                        </template>
+                        <v-spacer></v-spacer>Hola {{nombreBrigadistaActual}}
+                        <v-btn color="#FF0000" icon @click='drawer= !drawer'>
+                            <v-icon size="21"
+                                style=" box-shadow: 0 0 5px #ff0000; color:#6a0000; background-color: white; border-radius: 100%; padding: 8px; font-weight: bold;">
+                                mdi mdi-chevron-down</v-icon>
+                        </v-btn>
+
+                    </v-app-bar>
+
+
+                </v-layout>
+
+
+
+
+
+
+
+                <v-sheet color="#606F8C" height="175px" max-width="100%"
+                    style="background: linear-gradient(to bottom right, #d42727a9, #c75151);">
+
+
+
+                </v-sheet>
+
+
+                <template>
+
+
+
+                    <v-progress-linear color="#5c76a8" value="0" rounded
+                        style="height: 7px; margin-bottom: -50px; margin-top: -3px;"></v-progress-linear>
+                    <v-row dense>
+
+                        <v-card class="mx-auto" max-width="280" outlined id="iconMenu"
+                            @click="listado='Brigadistas'; graficoInforme='';  listaDatos()"
+                            style="border-radius: 20px;  box-shadow: 0 0 5px rgba(3, 33, 97, 0.2);">
+                            <v-list-item three-line>
+                                <v-list-item-content>
+                                    <v-list-item-title class="text-h5 mb-1">
+                                        <h4>Brigadistas</h4>
+                                        <v-divider></v-divider>
+                                    </v-list-item-title>
+
+
+
+                                </v-list-item-content>
+                                <v-list-item-avatar size="60" text id="iconSuspendida"
+                                    style="box-shadow: 0 0 5px rgba(3, 33, 97, 0.2); background: linear-gradient(to bottom right, #5d83ae, #486f99); padding: 20px; margin-top: 20px;">
+                                    <v-icon dark size="30">mdi-account-multiple</v-icon>
+                                </v-list-item-avatar>
+                            </v-list-item>
+                        </v-card>
+
+
+
+                        <v-card class="mx-auto" max-width="260" outlined id="iconMenu"
+                            @click="listado='Donaciones'; graficoInforme='';  listadoDonacion='Recibida';listaDatos()"
+                            style="border-radius: 20px;  box-shadow: 0 0 5px rgba(3, 33, 97, 0.2);">
+                            <v-list-item three-line>
+                                <v-list-item-content>
+                                    <v-list-item-title class="text-h5 mb-1">
+                                        <h4>Donaciones</h4>
+                                        <v-divider></v-divider>
+                                    </v-list-item-title>
+
+
+
+                                </v-list-item-content>
+                                <v-list-item-avatar size="60" text
+                                    style="box-shadow: 0 0 5px rgba(3, 33, 97, 0.2); background: linear-gradient(to bottom right, #71d772, #42ab49); padding: 20px; margin-top: 20px;">
+                                    <v-icon dark size="30">mdi-currency-usd</v-icon>
+                                </v-list-item-avatar>
+                            </v-list-item>
+                        </v-card>
+
+
+                        <v-card class="mx-auto" max-width="260" outlined id="iconMenu"
+                            @click="listado='Dotaciones'; graficoInforme='';  listaDatos()"
+                            style="border-radius: 20px; box-shadow: 0 0 5px rgba(3, 33, 97, 0.2);">
+                            <v-list-item three-line>
+                                <v-list-item-content>
+                                    <v-list-item-title class="text-h5 mb-1">
+                                        <h4>Dotaciones</h4>
+                                        <v-divider></v-divider>
+                                    </v-list-item-title>
+
+
+                                </v-list-item-content>
+                                <v-list-item-avatar size="60" text
+                                    style=" box-shadow: 0 0 5px rgba(3, 33, 97, 0.2); background: linear-gradient(to bottom right, #fed353, #dbcc44); padding: 20px; margin-top: 20px;">
+                                    <v-icon dark size="30">mdi-hard-hat</v-icon>
+                                </v-list-item-avatar>
+                            </v-list-item>
+                        </v-card>
+
+
+                        <v-card class="mx-auto" max-width="260" outlined id="iconMenu" text
+                            @click="listado='Eventos'; graficoInforme='';  listaDatos()"
+                            style="border-radius: 20px; box-shadow: 0 0 5px rgba(3, 33, 97, 0.2);">
+                            <v-list-item three-line>
+                                <v-list-item-content>
+                                    <v-list-item-title class="text-h5 mb-1">
+                                        <h4>Eventos</h4>
+                                        <v-divider></v-divider>
+                                    </v-list-item-title>
+
+
+                                </v-list-item-content>
+                                <v-list-item-avatar size="60" text @click="listado='Eventos'; listaDatos()"
+                                    style=" box-shadow: 0 0 5px rgba(3, 33, 97, 0.2); background: linear-gradient(to bottom right, #c63637, #f9635c); padding: 20px; margin-top: 20px;">
+                                    <v-icon dark size="30">mdi-calendar-star</v-icon>
+                                </v-list-item-avatar>
+                            </v-list-item>
+                        </v-card>
+
+
+
+
+
+
+                    </v-row>
+                </template>
+
+
+
+                <v-card id="card_t">
+                    <v-card-content>
+                        <v-card-title>
+                            <h2 class="px-1">{{ listado }}</h2>
+
+
+
+                            <v-spacer>
+                            </v-spacer>
+                            </v-text-field>
+
+
+                            <div id="div_brigadistas" style="display: none;">
+
+
+                                <v-container>
+                                    <v-row justify="center" align="center">
+                                        <v-col cols="auto">
+                                            <v-btn density="compact"
+                                                @click="graficoInforme='brigadistaCursos'; informeBrigadistacursos()">Cursos
+                                                Realizados</v-btn>
+                                        </v-col>
+
+                                        <v-col cols="auto">
+                                            <v-btn density="comfortable"
+                                                @click="graficoInforme='brigadistaEmpresas'; informeBrigadistaEmpresas()">Empresa</v-btn>
+                                        </v-col>
+
+                                        <v-col cols="auto">
+                                            <v-btn density="default"
+                                                @click="graficoInforme='brigadistaProfesion';informeBrigadistaProfesiones()">Profesión</v-btn>
+                                        </v-col>
+                                        <v-col cols="auto">
+                                            <v-btn density="comfortable"
+                                                @click="graficoInforme='brigadistaUbicacion';informeBrigadistaUbicacion()">Ubicación</v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+
+
+                            </div>
+
+                            <div id="div_dotaciones" style="display: none;">
+
+
+                                <v-container>
+                                    <v-row justify="center" align="center">
+                                        <v-col cols="auto">
+                                            <v-btn density="compact"
+                                                @click="graficoInforme='dotacionCantidad';informeDotacionCantidad()">Cantidad</v-btn>
+                                        </v-col>
+
+                                        <v-col cols="auto">
+                                            <v-btn density="comfortable"
+                                                @click="graficoInforme='dotacionEmpresa';informeDotacionEmpresa()">Empresa</v-btn>
+                                        </v-col>
+
+                                        <v-col cols="auto">
+                                            <v-btn density="default"
+                                                @click="graficoInforme='dotacionEstado';informeDotacionEstado()">estado</v-btn>
+                                        </v-col>
+                                        <v-col cols="auto">
+                                            <v-btn density="comfortable"
+                                                @click="graficoInforme='dotacionTipo';informeDotacionTipo()">Tipo</v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+
+
+                            </div>
+
+                            <div id="div_donaciones" style="display: none;">
+
+
+                                <v-container>
+                                    <v-row justify="center" align="center">
+                                        <v-col cols="auto">
+                                            <v-btn density="compact"
+                                                @click="graficoInforme='donacionDonante';informeDonacionDonante()">Donante</v-btn>
+                                        </v-col>
+
+                                        <v-col cols="auto">
+                                            <v-btn density="comfortable"
+                                                @click="graficoInforme='donacionEstado';informeDonacionEstado()">Estado</v-btn>
+                                        </v-col>
+
+                                        <v-col cols="auto">
+                                            <v-btn density="default"
+                                                @click="graficoInforme='donacionPrioridad';informeDonacionPrioridad()">Prioridad</v-btn>
+                                        </v-col>
+                                        <v-col cols="auto">
+                                            <v-btn density="comfortable"
+                                                @click="graficoInforme='donacionTipo';informeDonacionTipo()">Tipo de
+                                                donaciones</v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </div>
+
+                            <div id="div_eventos" style="display: none;">
+
+
+                                <v-container>
+                                    <v-row justify="center" align="center">
+                                        <v-col cols="auto">
+                                            <v-btn density="compact"
+                                                @click="graficoInforme='eventoEstado';informeEventoEstado()">Estado de
+                                                eventos</v-btn>
+                                        </v-col>
+
+
+                                    </v-row>
+                                </v-container>
+
+                            </div>
+
+
+
+                        </v-card-title>
+                    </v-card-content></v-card>
+
+            </div>
+            <div id="informesGraficaBrigadistas" style="margin-left: 2%;">
+
+
+                <div id="divGraficaBrigadistaCursos"
+                    style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Cursos realizados por brigadistas</h2>
+
+                    <canvas id="graficaBrigadistaCursos"></canvas>
+
+                </div>
+
+                <div id="divGraficaBrigadistaEmpresa"
+                    style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Brigadista por empresa</h2>
+
+                    <canvas id="graficaBrigadistaEmpresa"></canvas>
+
+                </div>
+
+                <div id="divGraficaBrigadistaProfesion"
+                    style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Profesion de brigadistas</h2>
+
+                    <canvas id="graficaBrigadistaProfesion"></canvas>
+
+                </div>
+
+                <div id="divGraficaBrigadistaUbicacion"
+                    style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Ubicacion de brigadistas</h2>
+
+                    <canvas id="graficaBrigadistaUbicacion"></canvas>
+
+                </div>
+
+            </div>
+
+            <div id="informesGraficaDonaciones" style="margin-left: 2%;">
+
+
+                <div id="divGraficaDonacionDonante"
+                    style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Donaciones clasificadas por donante</h2>
+
+                    <canvas id="graficaDonacionDonante"></canvas>
+
+                </div>
+
+                <div id="divGraficaDonacionEstado" style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Donaciones clasificadas por estado</h2>
+
+                    <canvas id="graficaDonacionEstado"></canvas>
+
+                </div>
+
+                <div id="divGraficaDonacionPrioridad"
+                    style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Donaciones clasificadas por prioridad</h2>
+
+                    <canvas id="graficaDonacionPrioridad"></canvas>
+
+                </div>
+
+                <div id="divGraficaDonacionTipo" style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Donaciones clasificadas por tipo</h2>
+
+                    <canvas id="graficaDonacionTipo"></canvas>
+
+                </div>
+
+            </div>
+
+
+            <div id="informesGraficaDotaciones" style="margin-left: 2%;">
+
+
+                <div id="divGraficaDotacionCantidad"
+                    style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Dotaciones clasificadas por cantidad</h2>
+
+                    <canvas id="graficaDotacionCantidad"></canvas>
+
+                </div>
+
+                <div id="divGraficaDotacionEmpresa"
+                    style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Dotaciones clasificadas por empresa</h2>
+
+                    <canvas id="graficaDotacionEmpresa"></canvas>
+
+                </div>
+
+                <div id="divGraficaDotacionEstado" style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Dotaciones clasificadas por estado</h2>
+
+                    <canvas id="graficaDotacionEstado"></canvas>
+
+                </div>
+
+                <div id="divGraficaDotacionTipo" style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Dotaciones clasificadas por tipo</h2>
+
+                    <canvas id="graficaDotacionTipo"></canvas>
+
+                </div>
+
+            </div>
+
+
+            <div id="informesGraficaEventos" style="margin-left: 2%;">
+
+
+                <div id="divGraficaEventoEstado" style="display: none; width: 50%; height: 50%; align-items: center;">
+
+                    <h2>Eventos clasificadas por estado</h2>
+
+                    <canvas id="graficaEventoEstado"></canvas>
+
+                </div>
+
+
+
+
+
+
+
+            </div>
+
+        </v-app>
+
+
+        <!-- aqui continua el navbar, este muestra una lista con las clases que tenemos actualmente -->
+
+
+        <v-navigation-drawer app right v-model="drawer" absolute temporary
+            style="font-family: Arial, Helvetica, sans-serif; width: 25%; height: auto; margin-top: 3%;">
+            <v-list-item three-line>
+                <v-list-item-content>
+
+                    <v-divider></v-divider>
+                    <v-list-item-title>
+                        <v-list-item-subtitle>
+                            <h3 style="color: #b51c1c;"><b>Nombre:</b> {{nombreBrigadistaActual}}</h3>
+                        </v-list-item-subtitle style="color: black;">
+                        <v-divider></v-divider>
+                    </v-list-item-title>
+                    <v-list-item-subtitle style="color: rgb(46, 46, 46);">
+                        <h4><b>CC:</b> {{idBrigadistaActual}}</h4>
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle style="color: rgb(46, 46, 46);">
+                        <h4><b>Rol:</b> {{rolBrigadistaActual}}</h4>
+                    </v-list-item-subtitle>
+
+                    <v-list-item-subtitle style="color: rgb(46, 46, 46);">
+                        <h4><b>Profesión:</b> {{profesionBrigadistaActual}}</h4>
+                    </v-list-item-subtitle>
+
+                    <v-list-item-subtitle style="color: rgb(46, 46, 46);">
+                        <h4><b>Empresa:</b> {{empresaBrigadistaActual}}</h4>
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle style="color: rgb(46, 46, 46);">
+                        <h4><b>Fecha de Inicio:</b> {{fechaInicioBrigadistaActual}}</h4>
+                    </v-list-item-subtitle>
+                </v-list-item-content>
+
+                <v-list-item-avatar size="60"
+                    style="box-shadow: 0 0 5px rgba(3, 33, 97, 0.2); background: linear-gradient(to bottom right, #c63637, #f9635c); padding: 20px; margin-top: 20px;">
+                    <v-icon dark size="30">mdi-account</v-icon>
+                </v-list-item-avatar>
+            </v-list-item>
+            <v-divider></v-divider>
+
+
+            <v-list-item rounded outlined>
+                <v-btn @click="dialogoContrasenia = true" style="width: 100%;"> <v-icon>mdi-key</v-icon>
+                    Cambiar contraseña</v-btn>
+            </v-list-item style="color: black;">
+
+
+
+            <template>
+                <div class="pa-2">
+                    <v-btn block color="#c63637" id="logout" href="logout">
+                        <spam style="color: white;">Cerrar sesión</spam>
+
+                    </v-btn>
+                </div>
+            </template>
+        </v-navigation-drawer>
+
+        <v-navigation-drawer app left v-model="drawer1" absolute temporary
+            style="font-family: Arial, Helvetica, sans-serif; width: 20%;">
+
+
+            <div id="logoAsobeecolMenu">
+
+                <img src="/resources/LogoAsobeecol.png"
+                    style="margin-top: 15px; width: 98%; height: 80%; margin-right: 20%;" alt="">
+
+            </div><br>
+            <v-divider></v-divider>
+
+
+
+
+            <v-list-item link href='/gestion'>
+                <!-- Nos redirecciona a la vista solicitud -->
+                <v-list-item-icon>
+                    <v-icon>mdi-cogs</v-icon> <!-- Hacemos uso de un icon -->
+                </v-list-item-icon>
+                <v-list-item-content>
+                    <v-list-item-title>
+                        <a id="lblSolicitud">Gestion</a>
+                    </v-list-item-title> <!-- Mandamos el nombre de la vista -->
+                </v-list-item-content>
+            </v-list-item>
+
+            <v-list-item link href='/informe'>
+                <!-- Nos redirecciona a la vista empleados -->
+                <v-list-item-icon>
+                    <v-icon>mdi-clipboard-list-outline</v-icon> <!-- Hacemos uso de un icon -->
+                </v-list-item-icon>
+                <v-list-item-content>
+                    <v-list-item-title>
+                        <a id="lblInforme">Informes</a>
+                    </v-list-item-title> <!-- Mandamos el nombre de la vista -->
+                </v-list-item-content>
+            </v-list-item>
+
+
+
+        </v-navigation-drawer>
+
+
+
+
+
+    </div>
+
+
+</body>
+
+<script type="module" src="acquisitions.js"></script>
+<!-- Hacemos uso de los cdn -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.js"
+    integrity="sha512-nqIFZC8560+CqHgXKez61MI0f9XSTKLkm0zFVm/99Wt0jSTZ7yeeYwbzyl0SGn/s8Mulbdw+ScCG41hmO2+FKw=="
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.0.2/dist/sweetalert2.all.min.js"></script>
+
+<!-- 1. Link Vue Javascript -->
+<script src='https://unpkg.com/vue/dist/vue.js'></script>
+
+<!-- 2. Link VCalendar Javascript (Plugin automatically installed) -->
+<script src='https://unpkg.com/v-calendar'></script>
+<script src="path/to/chartjs/dist/chart.umd.js"></script>
+
+<script>
+    // Datos de usuario en sesion
+    let url = 'http://localhost:3000/api/datos/';
+
+    //------------------------------Brigadistas-------------------------------
+
+    //retorna todos los brigadistas
+    let url1 = 'http://localhost:3000/api/brigadistas/';
+    //cambia la contraseña del brigadista
+    let url2 = 'http://localhost:3000/api/cambiarcontrasenia/';
+    //añade un nuevo brigadista
+    let url3 = 'http://localhost:3000/api/addbrigadista/';
+    //edita un brigadista
+    let url4 = 'http://localhost:3000/api/editbrigadista/';
+    //elimina un brigadista
+    let url5 = 'http://localhost:3000/api/deletebrigadista/';
+    //retorna todos los brigadistas que quieren cambiar contraseña
+    let url6 = 'http://localhost:3000/api/listabrigadistacambio/';
+    //cambia la contraseña
+    let url7 = 'http://localhost:3000/api/passwordbrigadistacambio/';
+    // da el numero de brigadistas activos e inactivos
+    let url8 = 'http://localhost:3000/api/estadobrigadistacontador/';
+    let url9 = 'http://localhost:3000/api/informeBrigadistaEmpresa/';
+
+    //-----------------------------------empresas------------------------------------
+    let url20 = 'http://localhost:3000/api/empresa/';
+    let url21 = 'http://localhost:3000/api/addempresa/';
+    let url22 = 'http://localhost:3000/api/editempresa/';
+    let url23 = 'http://localhost:3000/api/deleteempresa/';
+    let url24 = 'http://localhost:3000/api/searchempresa/';
+
+
+    //--------------------------Profesiones---------------------------------------
+    let url30 = 'http://localhost:3000/api/profesion/';
+
+    //------------------------------Roles-----------------------------------------
+    let url40 = 'http://localhost:3000/api/rol/';
+
+    //------------------------------Donaciones-----------------------------------------
+    let url50 = 'http://localhost:3000/api/donacion/';
+    let url51 = 'http://localhost:3000/api/adddonacion/';
+    let url52 = 'http://localhost:3000/api/estadodonacion/';
+    let url53 = 'http://localhost:3000/api/enviardonacionalmacen/';
+    let url54 = 'http://localhost:3000/api/entregardonacion/';
+    let url55 = 'http://localhost:3000/api/deletedonacion/';
+    let url56 = 'http://localhost:3000/api/editdonacion/';
+    let url57 = 'http://localhost:3000/api/comprobantedonacion/';
+    let url58 = 'http://localhost:3000/api/estadodonacioncontador/';
+
+    //--------------------------------Cursos-----------------------------------------------
+    let url60 = 'http://localhost:3000/api/cursos/';
+    let url61 = 'http://localhost:3000/api/cursosbrigadista/';
+    let url62 = 'http://localhost:3000/api/addcursosbrigadista/';
+    let url63 = 'http://localhost:3000/api/deletecursosbrigadista/';
+
+    //--------------------------------Dotacion-----------------------------------------------
+    let url70 = 'http://localhost:3000/api/dotacion/';
+    let url71 = 'http://localhost:3000/api/adddotacion/';
+    let url72 = 'http://localhost:3000/api/editdotacion/';
+    let url73 = 'http://localhost:3000/api/deletedotacion/';
+    let url74 = 'http://localhost:3000/api/dotacionfiltro/';
+
+    //--------------------------Eventos---------------------------------------
+    let url80 = 'http://localhost:3000/api/eventos/';
+    let url81 = 'http://localhost:3000/api/addeventos/';
+    let url82 = 'http://localhost:3000/api/editevento/';
+    let url83 = 'http://localhost:3000/api/deleteevento/';
+    let url84 = 'http://localhost:3000/api/estadoeventoscontador/';
+
+
+
+
+
+
+
+
+
+
+
+
+    //Creación del proyecto de Vue
+    new Vue({
+        el: '#gestion',
+        //Creación de Vuetify
+        vuetify: new Vuetify(),
+        data() {
+
+            return {
+                //inicializamos esta funcion en false para que cuando se haga clic en el navbar este se pueda desplegar
+                drawer: false,
+                drawer1: false,
+                //Datos usuario en sesión 
+                estado1: ['Recibida', 'En Almacén', 'Enviada'],
+                estadoDotacion: ['Disponible', 'Mantenimiento', 'Ocupado'],
+                tipoDonacion1: ['Alimentos', 'Dinero', 'Equipos', 'Herramientas', 'Materiales de construcción', 'Medicamentos', 'Prendas', 'Utencilios', 'Otro'],
+                tipoDotacion: ['Botiquín', 'Camilla', 'Martillo', 'Radio de comunicación', 'Uniforme'],
+                tipoRH: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+                prioridadDonacion1: ['Urgente', 'Alta', 'Media', 'Baja'],
+                tipoDonante: ['Empresa', 'Particular'],
+                tipoEmpresa: ['Privada', 'Publica'],
+                GeneroDonacion: ['Femenino', 'Masculino'],
+                edadPrendas: ['0-10 años', '11-20 años', '21-90 años'],
+                listadoBrigadista: [],
+                listadoEmpresa: [],
+                listadoProfesion: [],
+                listadoRol: [],
+                search: '',
+                graficoInforme: '',
+                searchBrigadista: '',
+                listado: '',
+                listadoDonacion: '',
+                valid: true,
+                secondDisabled: true,
+                //agregar donacion
+                addTipoDonanteDonacion: null,
+                addTipoDonacion: null,
+                addNombreDonanteDonacion: null,
+                addDocumentoDonanteDonacion: null,
+                addCelularDonanteDonacion: null,
+                addPaisDonanteDonacion: null,
+                addDepartamentoDonanteDonacion: null,
+                addCiudadDonanteDonacion: null,
+                addDireccionDonanteDonacion: null,
+                addTipoEmpresaDonacion: null,
+                addEmpresaDonante: null,
+                //editar donacion
+                editTipoDonanteDonacion: null,
+                editTipoDonacion: null,
+                editNombreDonanteDonacion: null,
+                editDocumentoDonanteDonacion: null,
+                editCelularDonanteDonacion: null,
+                editPaisDonanteDonacion: null,
+                editDepartamentoDonanteDonacion: null,
+                editCiudadDonanteDonacion: null,
+                editDireccionDonanteDonacion: null,
+                editTipoEmpresaDonacion: null,
+                editEmpresaDonante: null,
+                listCambioContrasenia: '',
+                //editar eventos
+                editNombreEvento: null,
+                editfv_5: null,
+                editfv_6: null,
+                editDetalleEvento: null,
+                editLugarEvento: null,
+                editHorarioEvento: null,
+                editIdBrigadista: null,
+                //Datos Usuario en sesion
+                idBrigadistaActual: null,
+                nombreBrigadistaActual: null,
+                profesionBrigadistaActual: null,
+                empresaBrigadistaActual: null,
+                fechaInicioBrigadistaActual: null,
+                brigadistaActivoContador: null,
+                brigadistaInactivoContador: null,
+                donacionEnAlmacenContador: null,
+                donacionEntregadaContador: null,
+                donacionRecibidaContador: null,
+                eventospasadosContador: null,
+                eventosProximosContador: null,
+                eventosEnCursoContador: null,
+
+
+
+
+
+
+
+
+                //Formato de fechasurl24
+                modelConfig: {
+                    type: 'string',
+                    mask: 'YYYY-MM-DD'
+                },
+
+
+
+            }
+
+        },
+        watch: {
+
+
+            listado(value) {
+                if (value == 'Brigadistas') {
+
+
+                    document.getElementById("div_brigadistas").style.display = "block";
+                    document.getElementById("div_donaciones").style.display = "none";
+                    document.getElementById("div_dotaciones").style.display = "none";
+                    document.getElementById("div_eventos").style.display = "none";
+
+                }
+                if (value == 'Donaciones') {
+
+
+                    document.getElementById("div_brigadistas").style.display = "none";
+                    document.getElementById("div_donaciones").style.display = "block";
+                    document.getElementById("div_dotaciones").style.display = "none";
+                    document.getElementById("div_eventos").style.display = "none";
+
+                }
+
+                if (value == 'Dotaciones') {
+
+
+                    document.getElementById("div_brigadistas").style.display = "none";
+                    document.getElementById("div_donaciones").style.display = "none";
+                    document.getElementById("div_dotaciones").style.display = "block";
+                    document.getElementById("div_eventos").style.display = "none";
+
+                }
+                if (value == 'Eventos') {
+
+
+                    document.getElementById("div_brigadistas").style.display = "none";
+                    document.getElementById("div_donaciones").style.display = "none";
+                    document.getElementById("div_dotaciones").style.display = "none";
+                    document.getElementById("div_eventos").style.display = "block";
+
+                }
+
+
+
+            },
+            //----------------LOS INFORMES--------------------------
+            graficoInforme(value) {
+
+
+                //-------------------BRIGADISTAS----------------------
+                if (value == 'brigadistaCursos') {
+                    document.getElementById("divGraficaBrigadistaCursos").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaBrigadistaCursos").style.display = "none";
+                }
+
+                if (value == 'brigadistaEmpresas') {
+                    document.getElementById("divGraficaBrigadistaEmpresa").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaBrigadistaEmpresa").style.display = "none";
+                }
+                if (value == 'brigadistaProfesion') {
+                    document.getElementById("divGraficaBrigadistaProfesion").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaBrigadistaProfesion").style.display = "none";
+                }
+                if (value == 'brigadistaUbicacion') {
+                    document.getElementById("divGraficaBrigadistaUbicacion").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaBrigadistaUbicacion").style.display = "none";
+                }
+
+                //-----------------------DONACION------------------------------
+
+                if (value == 'donacionDonante') {
+                    document.getElementById("divGraficaDonacionDonante").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaDonacionDonante").style.display = "none";
+                }
+                if (value == 'donacionEstado') {
+                    document.getElementById("divGraficaDonacionEstado").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaDonacionEstado").style.display = "none";
+                }
+                if (value == 'donacionPrioridad') {
+                    document.getElementById("divGraficaDonacionPrioridad").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaDonacionPrioridad").style.display = "none";
+                }
+                if (value == 'donacionTipo') {
+                    document.getElementById("divGraficaDonacionTipo").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaDonacionTipo").style.display = "none";
+                }
+
+                //-----------------------DOTACION------------------------------------
+                if (value == 'dotacionCantidad') {
+                    document.getElementById("divGraficaDotacionCantidad").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaDotacionCantidad").style.display = "none";
+                }
+                if (value == 'dotacionEmpresa') {
+                    document.getElementById("divGraficaDotacionEmpresa").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaDotacionEmpresa").style.display = "none";
+                }
+                if (value == 'dotacionEstado') {
+                    document.getElementById("divGraficaDotacionEstado").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaDotacionEstado").style.display = "none";
+                }
+                if (value == 'dotacionTipo') {
+                    document.getElementById("divGraficaDotacionTipo").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaDotacionTipo").style.display = "none";
+                }
+
+                //--------------------EVENTO------------------------
+                if (value == 'eventoEstado') {
+                    document.getElementById("divGraficaEventoEstado").style.display = "block";
+                }
+                else {
+                    document.getElementById("divGraficaEventoEstado").style.display = "none";
+                }
+            },
+        },
+
+        //Nos trae todos los datos de la API y nos las llena en cada variable
+        created() {
+            this.datosUsuario();
+        },
+        methods: {
+
+            // Extrae los datos del usuario en sesión para aplicar los filtros pertinentes.             
+            datosUsuario: function () {
+                axios.get(url)
+                    .then(response => {
+                        let datos = response.data;
+                        this.idBrigadistaActual = datos[0].idBrigadista;
+                        this.nombreBrigadistaActual = datos[0].nombreBrigadista;
+                        this.fechaInicioBrigadistaActual = new Date(datos[0].fechaInicio).toISOString('es-CO').split('T')[0];
+                        this.profesionBrigadistaActual = datos[0].profesion;
+                        this.empresaBrigadistaActual = datos[0].nombreEmpresa;
+                        this.ciudadEmpresaBrigadistaActual = datos[0].ciudad;
+                        this.passwordBrigadistaActual = datos[0].password;
+                        this.rolBrigadistaActual = datos[0].nombreRol;
+
+                        this.listado_roles();
+                        this.listado_empresas();
+
+
+                    });
+
+
+
+            },
+
+
+            //---------------------------INFORMES-------------------------------------
+            //----------------------BRIGADISTA------------------------
+            informeBrigadistacursos() {
+
+
+                fetch('/api/informeBrigadistaCursos')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.nombreCurso); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaBrigadistaCursos');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Brigadistas',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+            },
+
+            informeBrigadistaEmpresas() {
+                fetch('/api/informeBrigadistaEmpresa')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.nombreEmpresa); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaBrigadistaEmpresa').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Brigadistas',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+            },
+
+            informeBrigadistaProfesiones() {
+                fetch('/api/informeBrigadistaProfesion')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.profesion); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaBrigadistaProfesion').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Brigadistas',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+            },
+            informeBrigadistaUbicacion() {
+                fetch('/api/informeBrigadistaUbicacion')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.ciudad); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaBrigadistaUbicacion').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Brigadistas',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+            },
+
+
+
+            //---------------------DONACIONES--------------------------
+
+            informeDonacionDonante() {
+                fetch('/api/informeDonacionDonante')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.nombreDonante); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaDonacionDonante').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Donaciones',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+
+            },
+
+
+            informeDonacionEstado() {
+                fetch('/api/informeDonacionEstado')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.estado); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaDonacionEstado').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Donaciones',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+
+            },
+
+            informeDonacionPrioridad() {
+                fetch('/api/informeDonacionPrioridad')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.prioridad); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaDonacionPrioridad').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Donaciones',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+
+            },
+
+            informeDonacionTipo() {
+                fetch('/api/informeDonacionTipo')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.tipo); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaDonacionTipo').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Donaciones',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+
+            },
+
+
+            //-----------------------------DOTACIONES-----------------------------------
+
+            informeDotacionCantidad() {
+                fetch('/api/informeDotacionCantidad')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.tipo); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaDotacionCantidad').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Dotaciones',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+
+            },
+
+            informeDotacionEmpresa() {
+                fetch('/api/informeDotacionEmpresa')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.nombreEmpresa); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaDotacionEmpresa').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Dotaciones',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+
+            },
+
+            informeDotacionEstado() {
+                fetch('/api/informeDotacionEstado')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.estado); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaDotacionEstado').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Dotaciones',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+
+            },
+
+            informeDotacionTipo() {
+                fetch('/api/informeDotacionTipo')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.tipo); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.cantidad); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaDotacionTipo').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Dotaciones',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+
+            },
+
+            //-------------------------------------EVENTOS-------------------------------------------------
+            informeEventoEstado() {
+                fetch('/api/informeEventoEstado')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const labels = data.map((item) => item.estado); // Cambia "label" por el nombre real del campo de etiquetas
+                        const values = data.map((item) => item.contador); // Cambia "value" por el nombre real del campo de valores
+
+                        const ctx = document.getElementById('graficaEventoEstado').getContext('2d');
+                        const myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels,
+                                datasets: [{
+                                    label: 'Eventos',
+                                    data: values,
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(255, 159, 64, 0.2)',
+                                        'rgba(255, 205, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                        'rgba(201, 203, 207, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgb(255, 99, 132)',
+                                        'rgb(255, 159, 64)',
+                                        'rgb(255, 205, 86)',
+                                        'rgb(75, 192, 192)',
+                                        'rgb(54, 162, 235)',
+                                        'rgb(153, 102, 255)',
+                                        'rgb(201, 203, 207)'
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+
+                                            beginAtZero: true,
+                                            stepSize: 1
+                                        }
+                                    }],
+                                },
+                            },
+                        });
+                    });
+
+            },
+
+            //-----------------------------Cambio Contraseña---------------------------------
+
+            //--------------------Crea el item de dialogo ----------------------
+
+            crearCambioContrasenia(item) {
+                this.dialogoContraseniaUser = true;
+
+                this.idBrigadistaSeleccionado = Object.assign({}, item).idBrigadista;
+                this.nombreBrigadistaSeleccionado = Object.assign({}, item).nombreBrigadista;
+            },
+            //-------Cambia la contraseña desde el listado de brigadistas-------
+            guardarContraseniaUser: function () {
+
+                let password = this.nuevaContraseniaUser;
+                let id_brigadista = this.idBrigadistaSeleccionado;
+                axios.post(url2 + password + '/' + id_brigadista).then(response => {
+
+                    this.listaDatos();
+
+                    this.dialogoContraseniaUser = false,
+                        this.nuevaContraseniaUser = null,
+
+                        Swal.fire({
+                            title: 'Contraseña cambiada con exito!',
+                            icon: 'success',
+                            timer: 980,
+                            showConfirmButton: false,
+
+                        });
+
+                });
+            },
+
+            confirmarContrasenia(item) {
+                let nueva = Object.assign({}, item).nuevaPassword;
+                let id = Object.assign({}, item).idBrigadista;
+                Swal.fire({
+                    icon: 'info',
+                    title: '<p style="font-size: 19px;">¿Está seguro de confirmar cambio de contraseña?</p>',
+                    width: 425,
+                    height: 10,
+                    margin: 0,
+                    html: '<p style="font-size: 14px;font-weight: 40;">Esta acción es irreversible.</p>',
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Continuar',
+                    cancelButtonText: 'Cancelar',
+                    cancelButtonColor: 'red',
+                    confirmButtonColor: 'green',
+                    backdrop: 'rgba(255, 0, 0, 0.475)',
+
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+                        axios.post(url7 + nueva + '/' + id).then(response => {
+
+                            this.listaDatos();
+                            Swal.fire({
+                                title: 'Contraseña cambiada!',
+                                icon: 'success',
+                                timer: 980,
+                                showConfirmButton: false,
+                            });
+
+                        });
+                    }
+                })
+
+            },
+
+
+
+
+
+
+
+
+        }
+    });
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+<style>
+    /* Works on Firefox */
+    *::-webkit-scrollbar {
+        width: 1px;
+    }
+
+    *::-webkit-scrollbar:hover {
+        width: 7px;
+    }
+
+    /* Estilos barra (thumb) de scroll */
+    *::-webkit-scrollbar-thumb {
+        background: #b44141;
+        height: 4px;
+        border-radius: 4px;
+    }
+
+    /* Estilos track de scroll */
+    *::-webkit-scrollbar-track {
+        border-radius: 4px;
+        background: #b44141;
+    }
+
+    *::-webkit-scrollbar-track:hover,
+    *::-webkit-scrollbar-track:active {
+        background: #d3e0fa42;
+    }
+
+    #draw,
+    #nav {
+        background-color: #b44141;
+    }
+
+    #logout,
+    #fullScreen,
+    #draw_d {
+        color: white;
+        font-size: 18px;
+        font-weight: 1px;
+    }
+
+    #card_t {
+        margin-top: 1%;
+        margin-bottom: 1%;
+        box-shadow: 0 0 9px rgba(33, 33, 33, .2);
+        border-radius: 20px;
+        max-width: 100%;
+        min-width: max-content;
+        padding-bottom: 1%;
+        margin-left: 1%;
+        margin-right: 1%;
+
+    }
+
+    /*Animación del botón agregar*/
+    #btn_ag {
+        background-color: #608c6d;
+        color: white;
+        padding: 4px;
+        width: 50px;
+    }
+
+    #btn_ag a {
+        color: white;
+        visibility: collapse;
+    }
+
+    #btn_ag .v-icon {
+        margin-left: 75px;
+    }
+
+    #btn_ag:hover {
+        width: 100px;
+    }
+
+    #btn_ag:hover a {
+        visibility: visible;
+        margin-left: -98px;
+    }
+
+    #btn_ag:hover .v-icon {
+        visibility: collapse;
+        transform: translateY(-10%);
+
+    }
+
+    #tg_one:hover {
+        background-color: #00807e;
+    }
+
+    #tg_one:hover .v-icon {
+        color: white;
+    }
+
+    div[class*='swal2'] {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-weight: bold;
+    }
+
+    .btn_eliminar:hover {
+        color: #b90606;
+    }
+
+    .btn_suspender:hover {
+        color: #ff6b09;
+    }
+
+    .btn_editar:hover {
+        color: #04509c;
+
+    }
+
+    #btn_ac {
+        background-color: #c24b4b;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        height: 50px;
+        width: max-content;
+    }
+
+    .edit_c {
+        background-color: rgb(228, 225, 225);
+        height: 56px;
+        box-shadow: 0 0 3px rgba(6, 6, 6, 0.2);
+    }
+
+    .v-autocomplete__content.menuable__content__active {
+        border-radius: 10px !important;
+        width: max-content;
+        margin-top: 5px;
+        box-shadow: 0 0 5px #95acdadb;
+
+    }
+
+    .v-autocomplete__content.menuable__content__active::-webkit-scrollbar {
+        width: 0px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    section {
+        position: relative;
+    }
+
+    .btn-pluss {
+        overflow: hidden;
+        position: relative;
+        display: block;
+        padding-left: 5px;
+        padding-right: 5px;
+        border-radius: 22px;
+        width: 60px;
+        margin: 0 auto;
+        background-color: white;
+        -webkit-transition: width .3s .5s ease, border-radius 1.1s ease;
+        transition: width .3s .5s ease, border-radius 1.1s ease;
+    }
+
+    .btn-pluss a {
+        display: block;
+        position: relative;
+        color: #d72d2d;
+        text-decoration: none;
+        overflow: hidden;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .btn-pluss a:hover {
+        text-decoration: inherit;
+        color: white;
+        background-color: #d72d2d;
+        -webkit-transition: background-color .5s ease;
+        transition: background-color .5s ease;
+    }
+
+    .btn-pluss:after {
+        content: '+';
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        display: block;
+        height: 20px;
+        width: 20px;
+        border-radius: 100%;
+        line-height: 20px;
+        text-align: center;
+        font-size: 1.1rem;
+        background-color: #d72d2d;
+        color: white;
+        -webkit-transform: translateY(-30%) translateX(-30%);
+        transform: translateY(-50%) translateX(-50%);
+        -webkit-transition: all .3s .5s ease;
+        transition: all .3s .5s ease;
+
+        cursor: hand;
+    }
+
+    .btn-pluss ul {
+        opacity: 0;
+    }
+
+    .btn-pluss ul {
+        margin-top: 25px;
+        opacity: 0;
+        width: 100%;
+        margin-left: 10px;
+        -webkit-transition: all .5s ease;
+        transition: all .5s ease;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .btn-pluss ul li {
+        background-color: #e4e4e4;
+        margin-top: 15px;
+        border-radius: 3px;
+        width: 80%;
+        height: 0px;
+        overflow: hidden;
+        -webkit-transition: height 1s ease;
+        transition: height 1s ease;
+    }
+
+    .tooltip {
+        position: relative;
+        padding: 5px;
+        border-radius: 5px;
+        width: 70px;
+        text-align: center;
+        font-size: 0.7rem;
+        font-weight: bold;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        -webkit-animation-duration: 3s;
+        animation-duration: 3s;
+        -webkit-animation-name: jump;
+        animation-name: jump;
+        -webkit-animation-iteration-count: infinite;
+        animation-iteration-count: infinite;
+        background-color: #fff;
+        color: #d72d2d;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
+        pointer-events: none;
+    }
+
+    .tooltip::after {
+        content: '';
+        position: absolute;
+        -webkit-transform: rotate(35deg);
+        transform: rotate(45deg);
+        display: block;
+        height: 10px;
+        width: 10px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        background-color: inherit;
+    }
+
+    .tooltip::before {
+        content: '';
+        color: white;
+    }
+
+    .btn-pluss-wrapper:hover .tooltip {
+        -webkit-animation-duration: 0s;
+        animation-duration: 0s;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
+        color: white;
+        width: 90px;
+    }
+
+
+    .btn-pluss-wrapper:hover .btn-pluss {
+        width: 150px;
+        border-radius: 15px;
+        padding-bottom: 5px;
+        -webkit-transition: width .3s ease, border-radius .3s ease, padding-bottom .3s ease;
+        transition: width .3s ease, border-radius .3s ease, padding-bottom .3s ease;
+    }
+
+    .btn-pluss-wrapper:hover .btn-pluss::after {
+        -webkit-transition: all .3s ease;
+        transition: all .3s ease;
+        left: 50%;
+        top: 10px;
+        -webkit-transform: translateY(-5px) translateX(-50%);
+        transform: translateY(-5px) translateX(-50%);
+    }
+
+    .btn-pluss-wrapper:hover .btn-pluss ul {
+        opacity: 1;
+        margin-top: 30px;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+
+    .btn-pluss-wrapper:hover .btn-pluss li {
+        height: 25px;
+        -webkit-transition: height 1s ease;
+        transition: height 1s ease;
+    }
+
+    .btn-pluss-wrapper:hover .btn-pluss li:hover {
+        border-bottom: 1px solid #d2c9c9;
+    }
+
+    @-webkit-keyframes jump {
+        0% {
+            -webkit-transform: translateY(3px);
+            transform: translateY(3px);
+        }
+
+        50% {
+            -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+        }
+
+        100% {
+            -webkit-transform: translateY(3px);
+            transform: translateY(3px);
+        }
+    }
+
+    @keyframes jump {
+        0% {
+            -webkit-transform: translateY(3px);
+            transform: translateY(3px);
+        }
+
+        50% {
+            -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+        }
+
+        100% {
+            -webkit-transform: translateY(3px);
+            transform: translateY(3px);
+        }
+    }
+
+
+
+    #lblGestion:hover,
+    #lblInforme:hover,
+    #lblSolicitud:hover {
+        color: rgb(218, 15, 15);
+        transition: color .5s;
+    }
+
+
+    #imgAsobeecol {
+        height: 40px;
+        width: 60px;
+    }
+
+
+
+
+    #tablaPanel {
+        /* color: black; */
+        background-color: #ebd2d2;
+        inline-size: auto;
+
+
+
+    }
+
+
+    .v-data-table-header th {
+        background-color: #ff00004d;
+        font-weight: bold;
+        font-size: large;
+
+
+
+    }
+
+    .v-data-table tbody tr:nth-child(even) {
+        background-color: #ebe0c134;
+        /* Color intercalado para filas pares */
+    }
+
+    .v-data-table tbody tr:nth-child(odd) {
+        background-color: #f5aeae50;
+        /* Color intercalado para filas impares */
+    }
+
+
+
+
+    #iconMenu:hover {
+
+        box-shadow: 0px 0px 10px rgba(31, 31, 31, 0.589);
+        transform: scale(1.20);
+        opacity: 200;
+        transform: rotate(-50%);
+
+
+    }
+
+
+    section {
+        position: relative;
+    }
+
+    .btn-pluss {
+        overflow: hidden;
+        position: relative;
+        display: block;
+        padding-left: 5px;
+        padding-right: 5px;
+        border-radius: 22px;
+        width: 30px;
+        margin: 0 auto;
+        background-color: white;
+        -webkit-transition: width .3s .5s ease, border-radius 1.1s ease;
+        transition: width .3s .5s ease, border-radius 1.1s ease;
+    }
+
+    .btn-pluss a {
+        display: block;
+        position: relative;
+        color: #FA434B;
+        text-decoration: none;
+        overflow: hidden;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .btn-pluss a:hover {
+        text-decoration: inherit;
+        color: white;
+        background-color: #FA434B;
+        -webkit-transition: background-color .5s ease;
+        transition: background-color .5s ease;
+    }
+
+    .btn-pluss:after {
+        content: '+';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: block;
+        height: 20px;
+        width: 20px;
+        border-radius: 100%;
+        line-height: 20px;
+        text-align: center;
+        font-size: 1.1rem;
+        background-color: #FA434B;
+        color: white;
+        -webkit-transform: translateY(-50%) translateX(-50%);
+        transform: translateY(-50%) translateX(-50%);
+        -webkit-transition: all .3s .5s ease;
+        transition: all .3s .5s ease;
+        cursor: pointer;
+        cursor: hand;
+    }
+
+    .btn-pluss ul {
+        opacity: 0;
+    }
+
+    .btn-pluss ul {
+        margin-top: 15px;
+        opacity: 0;
+        width: 100%;
+        margin-left: 0px;
+        -webkit-transition: all .5s ease;
+        transition: all .5s ease;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .btn-pluss ul li {
+        background-color: #e4e4e4;
+        margin-top: 5px;
+        border-radius: 5px;
+        width: 100%;
+        height: 0px;
+        overflow: hidden;
+        -webkit-transition: height 1s ease;
+        transition: height 1s ease;
+    }
+
+    .tooltip {
+        position: relative;
+        padding: 5px;
+        border-radius: 5px;
+        width: 70px;
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: bold;
+        margin: 0 auto;
+        margin-bottom: 15px;
+        -webkit-animation-duration: 3s;
+        animation-duration: 3s;
+        -webkit-animation-name: jump;
+        animation-name: jump;
+        -webkit-animation-iteration-count: infinite;
+        animation-iteration-count: infinite;
+        background-color: #fff;
+        color: #FA434B;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
+        pointer-events: none;
+    }
+
+    .tooltip::after {
+        content: '';
+        position: absolute;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        display: block;
+        height: 10px;
+        width: 10px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        background-color: inherit;
+    }
+
+    .tooltip::before {
+        content: '';
+        color: white;
+    }
+
+    .btn-pluss-wrapper:hover .tooltip {
+        -webkit-animation-duration: 0s;
+        animation-duration: 0s;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
+        color: white;
+        width: 90px;
+    }
+
+    .btn-pluss-wrapper:hover .tooltip::before {
+        content: 'Choose!';
+        display: block;
+        color: #FA434B;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        -webkit-transition: all 1s .3s ease;
+        transition: all 1s .3s ease;
+    }
+
+    .btn-pluss-wrapper:hover .btn-pluss {
+        width: 150px;
+        border-radius: 15px;
+        padding-bottom: 5px;
+        -webkit-transition: width .3s ease, border-radius .3s ease, padding-bottom .3s ease;
+        transition: width .3s ease, border-radius .3s ease, padding-bottom .3s ease;
+    }
+
+    .btn-pluss-wrapper:hover .btn-pluss::after {
+        -webkit-transition: all .3s ease;
+        transition: all .3s ease;
+        left: 50%;
+        top: 10px;
+        -webkit-transform: translateY(-5px) translateX(-50%);
+        transform: translateY(-5px) translateX(-50%);
+    }
+
+    .btn-pluss-wrapper:hover .btn-pluss ul {
+        opacity: 1;
+        margin-top: 30px;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+
+    .btn-pluss-wrapper:hover .btn-pluss li {
+        height: 25px;
+        -webkit-transition: height 1s ease;
+        transition: height 1s ease;
+    }
+
+    .btn-pluss-wrapper:hover .btn-pluss li:hover {
+        border-bottom: 1px solid #d2c9c9;
+    }
+
+    @-webkit-keyframes jump {
+        0% {
+            -webkit-transform: translateY(3px);
+            transform: translateY(3px);
+        }
+
+        50% {
+            -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+        }
+
+        100% {
+            -webkit-transform: translateY(3px);
+            transform: translateY(3px);
+        }
+    }
+
+    @keyframes jump {
+        0% {
+            -webkit-transform: translateY(3px);
+            transform: translateY(3px);
+        }
+
+        50% {
+            -webkit-transform: translateY(-15px);
+            transform: translateY(-15px);
+        }
+
+        100% {
+            -webkit-transform: translateY(3px);
+            transform: translateY(3px);
+        }
+    }
+</style>
+
+</body>
+
+</html>
